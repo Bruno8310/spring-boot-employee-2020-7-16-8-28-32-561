@@ -22,8 +22,7 @@ public class CompanyServiceTest {
     void should_return_companies_when_get_companies_given_no_parameter() {
         // given
         CompanyRepository mockedCompanyRepository = mock(CompanyRepository.class);
-        given(mockedCompanyRepository.findAll()).willReturn(
-                Arrays.asList(new Company(1, "alibaba", Arrays.asList(new Employee(1, "sss", 20, "male", 200), new Employee(2, "fff", 50, "male", 5000)))));
+        given(mockedCompanyRepository.findAll()).willReturn(Arrays.asList(getMockCompany()));
         CompanyService companyService = new CompanyService(mockedCompanyRepository);
         // when
         List<Company> companies = companyService.getAllCompanies();
@@ -36,10 +35,7 @@ public class CompanyServiceTest {
     void should_return_company_when_get_company_by_id_given_id() {
         // given
         CompanyRepository mockedCompanyRepository = mock(CompanyRepository.class);
-        given(mockedCompanyRepository.findById(1)).willReturn(
-                Optional.of(new Company(1, "alibaba",
-                        Arrays.asList(new Employee(1, "sss", 20, "male", 200),
-                                new Employee(2, "fff", 50, "male", 5000)))));
+        given(mockedCompanyRepository.findById(1)).willReturn(Optional.of(getMockCompany()));
         CompanyService companyService = new CompanyService(mockedCompanyRepository);
         // when
         Company company = companyService.getCompanyById(1);
@@ -50,14 +46,9 @@ public class CompanyServiceTest {
     @Test
     void should_return_company_when_add_company_given_company() {
         // given
-        Company company = new Company(1, "alibaba",
-                Arrays.asList(new Employee(1, "sss", 20, "male", 200),
-                        new Employee(2, "fff", 50, "male", 5000)));
+        Company company = getMockCompany();
         CompanyRepository mockedCompanyRepository = mock(CompanyRepository.class);
-        given(mockedCompanyRepository.save(company)).willReturn(
-                new Company(1, "alibaba",
-                        Arrays.asList(new Employee(1, "sss", 20, "male", 200),
-                                new Employee(2, "fff", 50, "male", 5000))));
+        given(mockedCompanyRepository.save(company)).willReturn(getMockCompany());
         CompanyService companyService = new CompanyService(mockedCompanyRepository);
         // when
         Company newCompany = companyService.addCompany(company);
@@ -68,13 +59,20 @@ public class CompanyServiceTest {
     @Test
     void should_return_void_when_update_company_given_company_id_and_company() {
         // given
-        Company company = new Company(1, "alibaba");
+        Company company = getMockCompany();
+        Company company1 = getMockCompany();
+        company1.setCompanyName("test");
+        company1.setEmployeesNumber(100);
+
         CompanyRepository mockedCompanyRepository = mock(CompanyRepository.class);
-        given(mockedCompanyRepository.findById(anyInt())).willReturn(Optional.of(new Company(1, "tencent")));
+
+        given(mockedCompanyRepository.findById(anyInt())).willReturn(Optional.of(getMockCompany()));
+
         given(mockedCompanyRepository.save(any())).willReturn(company);
+
         CompanyService companyService = new CompanyService(mockedCompanyRepository);
         // when
-        Company updatedCompany = companyService.updateCompanyById(1, company);
+        Company updatedCompany = companyService.updateCompanyById(1, company1);
         // then
         assertEquals(company.getCompanyName(), updatedCompany.getCompanyName());
     }
@@ -84,12 +82,18 @@ public class CompanyServiceTest {
         // given
         CompanyRepository mockCompanyRepository = mock(CompanyRepository.class);
         given(mockCompanyRepository.findAll(PageRequest.of(1, 2))).
-                willReturn(new PageImpl<>(Arrays.asList(new Company(1, "alibaba"),
-                        new Company(2, "tencent"))));
+                willReturn(new PageImpl<>(Arrays.asList(getMockCompany())));
         CompanyService companyService = new CompanyService(mockCompanyRepository);
         // when
         List<Company> companies = companyService.getCompaniesByRange(1, 2).toList();
         // then
-        assertEquals(2, companies.size());
+        assertEquals(1, companies.size());
     }
+
+    private Company getMockCompany() {
+        return new Company(1, "alibaba", 2,
+                Arrays.asList(new Employee(1, "zhangsan", 20, "male", 200, 1),
+                        new Employee(2, "lisi", 50, "male", 5000, 1)));
+    }
+
 }
