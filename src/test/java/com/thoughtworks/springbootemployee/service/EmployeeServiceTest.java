@@ -44,7 +44,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_return_employee_when_get_employee_by_id_given_id() {
+    void should_return_employee_when_get_employee_by_id_given_id() throws NotFoundException {
         // given
         EmployeeRepository mockedEmployeeRepository = mock(EmployeeRepository.class);
         given(mockedEmployeeRepository.findById(1)).willReturn(Optional.of(getMockEmploy()));

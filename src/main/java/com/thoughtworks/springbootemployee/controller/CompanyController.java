@@ -18,12 +18,14 @@ public class CompanyController {
     }
 
     @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     public List<Company> getCompaniesByConditions(@RequestParam(value = "page", required = false) Integer page,
                                                   @RequestParam(value = "pageSize", required = false) Integer pageSize) throws NotFoundException {
         return companyService.getCompaniesByConditions(page, pageSize);
     }
 
     @GetMapping("/{companyId}")
+    @ResponseStatus(HttpStatus.OK)
     public Company getCompanyByNumber(@PathVariable int companyId) throws NotFoundException {
         return companyService.getCompanyById(companyId);
     }
@@ -35,11 +37,13 @@ public class CompanyController {
     }
 
     @PutMapping("/{companyId}")
+    @ResponseStatus(HttpStatus.OK)
     public Company updateCompanyByNumber(@PathVariable Integer companyId, @RequestBody Company updateCompany) throws NotFoundException {
         return companyService.updateCompanyById(companyId, updateCompany);
     }
 
     @DeleteMapping("/{companyId}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteCompanyById(@PathVariable Integer companyId) {
         companyService.deleteCompanyById(companyId);
     }

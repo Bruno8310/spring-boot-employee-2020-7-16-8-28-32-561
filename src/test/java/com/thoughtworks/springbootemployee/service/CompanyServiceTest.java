@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -32,7 +33,7 @@ public class CompanyServiceTest {
 
 
     @Test
-    void should_return_company_when_get_company_by_id_given_id() {
+    void should_return_company_when_get_company_by_id_given_id() throws NotFoundException {
         // given
         CompanyRepository mockedCompanyRepository = mock(CompanyRepository.class);
         given(mockedCompanyRepository.findById(1)).willReturn(Optional.of(getMockCompany()));
@@ -57,7 +58,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_void_when_update_company_given_company_id_and_company() {
+    void should_return_void_when_update_company_given_company_id_and_company() throws NotFoundException {
         // given
         Company company = getMockCompany();
         Company company1 = getMockCompany();

@@ -71,6 +71,5 @@ public class CompanyService {
             throw new NotFoundException();
         }
             return company.get();
-
     }
 }
