@@ -20,12 +20,12 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getEmployeesByConditions(@RequestParam(value = "gender", required = false) String gender,
                                                    @RequestParam(value = "page", required = false) Integer page,
-                                                   @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+                                                   @RequestParam(value = "pageSize", required = false) Integer pageSize) throws NotFoundException {
         return employeeService.getEmployeesByConditions(gender, page, pageSize);
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Integer id) {
+    public Employee getEmployeeById(@PathVariable Integer id) throws NotFoundException {
         return employeeService.getEmployeeById(id);
     }
 

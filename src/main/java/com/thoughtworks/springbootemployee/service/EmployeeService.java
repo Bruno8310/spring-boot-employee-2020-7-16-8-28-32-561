@@ -33,8 +33,12 @@ public class EmployeeService {
         return employeeRepository.save(employeeUpdated);
     }
 
-    public Employee getEmployeeById(Integer id) {
-        return employeeRepository.findById(id).orElse(null);
+    public Employee getEmployeeById(Integer id) throws NotFoundException {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (Objects.isNull(employee)) {
+            throw new NotFoundException();
+        }
+        return employee.get();
     }
 
     public Employee addEmployee(Employee employee) {
@@ -57,14 +61,18 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<Employee> getEmployeesByConditions(String gender, Integer page, Integer pageSize) {
+    public List<Employee> getEmployeesByConditions(String gender, Integer page, Integer pageSize) throws NotFoundException {
         List<Employee> employees = getAllEmployees();
         if (Objects.nonNull(gender) && !gender.isEmpty()) {
             employees = getEmployeesByGender(gender);
+        } else {
+            throw new NotFoundException();
         }
         Page<Employee> employeesByPage = getEmployeesByPage(page, pageSize);
         if (Objects.nonNull(page) && Objects.nonNull(pageSize) && Objects.nonNull(employeesByPage)) {
             employees = employeesByPage.getContent();
+        } else {
+            throw new NotFoundException();
         }
         return employees;
     }

@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.service.CompanyService;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,12 @@ public class CompanyController {
 
     @GetMapping()
     public List<Company> getCompaniesByConditions(@RequestParam(value = "page", required = false) Integer page,
-                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) throws NotFoundException {
         return companyService.getCompaniesByConditions(page, pageSize);
     }
 
     @GetMapping("/{companyId}")
-    public Company getCompanyByNumber(@PathVariable int companyId) {
+    public Company getCompanyByNumber(@PathVariable int companyId) throws NotFoundException {
         return companyService.getCompanyById(companyId);
     }
 
@@ -34,7 +35,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{companyId}")
-    public Company updateCompanyByNumber(@PathVariable Integer companyId, @RequestBody Company updateCompany) {
+    public Company updateCompanyByNumber(@PathVariable Integer companyId, @RequestBody Company updateCompany) throws NotFoundException {
         return companyService.updateCompanyById(companyId, updateCompany);
     }
 

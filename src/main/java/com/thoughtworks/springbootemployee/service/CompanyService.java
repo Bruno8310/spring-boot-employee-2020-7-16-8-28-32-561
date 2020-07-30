@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CompanyService {
@@ -22,8 +24,12 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public Company getCompanyById(Integer id) {
-        return companyRepository.findById(id).orElse(null);
+    public Company getCompanyById(Integer id) throws NotFoundException {
+        Optional<Company> company = companyRepository.findById(id);
+        if (Objects.isNull(company)) {
+            throw new NotFoundException();
+        }
+        return company.get();
     }
 
     public Company addCompany(Company company) {
@@ -38,29 +44,33 @@ public class CompanyService {
         return companyRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    public List<Company> getCompaniesByConditions(Integer page, Integer pageSize) {
+    public List<Company> getCompaniesByConditions(Integer page, Integer pageSize) throws NotFoundException {
         List<Company> companies = getAllCompanies();
         if (Objects.nonNull(page) && Objects.nonNull(pageSize)) {
             Page<Company> companiesByRange = getCompaniesByRange(page, pageSize);
             companies = companiesByRange.getContent();
+        } else {
+            throw new NotFoundException();
         }
         return companies;
     }
 
-    public Company updateCompanyById(Integer id, Company updateCompany) {
-        Company company = companyRepository.findById(id).orElse(null);
+    public Company updateCompanyById(Integer id, Company updateCompany) throws NotFoundException {
+        Optional<Company> company = companyRepository.findById(id);
         if (Objects.nonNull(company)) {
             if (Objects.nonNull(updateCompany.getEmployeesNumber())) {
-                company.setCompanyName(updateCompany.getCompanyName());
+                company.get().setCompanyName(updateCompany.getCompanyName());
             }
             if (Objects.nonNull(updateCompany.getEmployeesNumber())) {
-                company.setEmployeesNumber(updateCompany.getEmployeesNumber());
+                company.get().setEmployeesNumber(updateCompany.getEmployeesNumber());
             }
             if (Objects.nonNull(updateCompany.getEmployees())) {
-                company.setEmployees(updateCompany.getEmployees());
+                company.get().setEmployees(updateCompany.getEmployees());
             }
-            return companyRepository.save(company);
+        } else {
+            throw new NotFoundException();
         }
-        return null;
+            return company.get();
+
     }
 }
