@@ -7,24 +7,28 @@ import java.util.List;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int companyId;
+    private int id;
     private String companyName;
     private int employeesNumber;
-    @OneToMany
+    @OneToMany(mappedBy = "companyId")
     private List<Employee> employees;
 
     public Company() {
     }
 
-    public Company(int companyId, String companyName) {
-        this.companyId = companyId;
+    public Company(int id, String companyName, int employeesNumber, List<Employee> employees) {
+        this.id = id;
         this.companyName = companyName;
+        this.employeesNumber = employeesNumber;
+        this.employees = employees;
     }
 
-    public Company(int companyId, String companyName, List<Employee> employees) {
-        this.companyId = companyId;
-        this.companyName = companyName;
-        this.employees = employees;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCompanyName() {
@@ -41,14 +45,6 @@ public class Company {
 
     public void setEmployeesNumber(int employeesNumber) {
         this.employeesNumber = employeesNumber;
-    }
-
-    public int getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
     }
 
     public List<Employee> getEmployees() {

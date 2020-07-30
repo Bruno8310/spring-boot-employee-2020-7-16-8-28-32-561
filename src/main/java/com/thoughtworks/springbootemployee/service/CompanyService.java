@@ -40,8 +40,8 @@ public class CompanyService {
 
     public List<Company> getCompaniesByConditions(Integer page, Integer pageSize) {
         List<Company> companies = getAllCompanies();
-        Page<Company> companiesByRange = getCompaniesByRange(page, pageSize);
-        if (Objects.nonNull(page) && Objects.nonNull(pageSize) && Objects.nonNull(companiesByRange)) {
+        if (Objects.nonNull(page) && Objects.nonNull(pageSize)) {
+            Page<Company> companiesByRange = getCompaniesByRange(page, pageSize);
             companies = companiesByRange.getContent();
         }
         return companies;

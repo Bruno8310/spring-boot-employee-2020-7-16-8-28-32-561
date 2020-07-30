@@ -22,9 +22,13 @@ public class EmployeeServiceTest {
     void should_return_updated_employee_when_update_given_employee_id_and_employee_info() {
         // given
         Employee employee = new Employee(1, "lisi", 15, "female", 12200);
+
         EmployeeRepository mockedEmployeeRepository = mock(EmployeeRepository.class);
-        given(mockedEmployeeRepository.findById(anyInt())).willReturn(Optional.of(new Employee(1, "zhangsan", 12, "male", 1200)));
-        given(mockedEmployeeRepository.save(any())).willReturn(employee);
+        // TODO
+        given(mockedEmployeeRepository.findById(1)).willReturn(Optional.of(new Employee(1, "zhangsan", 12, "male", 1200)));
+        // TODO
+        given(mockedEmployeeRepository.save(employee)).willReturn(employee);
+
         EmployeeService employeeService = new EmployeeService(mockedEmployeeRepository);
         // when
         Employee employeeResult = employeeService.updateEmployeeById(1, employee);
@@ -59,13 +63,15 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_return_1_when_delete_employee_by_id_given_employee_id() {
+    void should_judge_when_delete_employee_by_id_given_employee_id() {
         // given
         EmployeeRepository mockedEmployeeRepository = mock(EmployeeRepository.class);
+
         EmployeeService employeeService = new EmployeeService(mockedEmployeeRepository);
         // when
         employeeService.deleteEmployeeById(2);
         // then
+        // TODO
         verify(mockedEmployeeRepository).deleteById(any());
     }
 

@@ -18,7 +18,7 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee updateEmployeeById(int id, Employee updatedEmployee) {
+    public Employee updateEmployeeById(Integer id, Employee updatedEmployee) {
         Employee employee = employeeRepository.findById(id).orElse(null);
         if (Objects.nonNull(employee)) {
             employee.setName(updatedEmployee.getName());
