@@ -17,8 +17,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,15 +40,10 @@ public class CompanyIntegrationTest {
 
     @Test
     void should_return_companies_when_hit_get_companies_given_nothing() throws Exception {
-        Company company = getMockCompany().get(0);
-        this.companyRepository.save(company);
-        List<Company> companies = getMockCompany();
+        List<Company> companies = this.saveCompany();
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").isNumber())
-                .andExpect(jsonPath("$[0].companyName").value(companies.get(0).getCompanyName()))
-                .andExpect(jsonPath("$[0].employeesNumber").value(companies.get(0).getEmployeesNumber()));
+                .andExpect(jsonPath("$", hasSize(companies.size())));
 
     }
 
@@ -65,16 +59,64 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.companyName").value(company.getCompanyName()))
                 .andExpect(jsonPath("$.employeesNumber").value(company.getEmployeesNumber()));
+    }
 
+    @Test
+    void should_return_new_company_when_update_old_company_given_comany_and_id() throws Exception {
+        this.saveCompany();
+        Company company = new Company(1, "tencent", 2, emptyList());
+        String companyContent = "{\n" +
+                "    \"companyName\": \"tencent\",\n" +
+                "    \"employeesNumber\": 2\n" +
+                "}";
+        mockMvc.perform(put("/companies/1").contentType(MediaType.APPLICATION_JSON).content(companyContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.companyName").value(company.getCompanyName()))
+                .andExpect(jsonPath("$.employeesNumber").value(company.getEmployeesNumber()));
+    }
+
+    @Test
+    void should_return_company_when_get_company_by_id_given_id() throws Exception {
+        List<Company> companies = this.saveCompany();
+        mockMvc.perform(get("/companies/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value(companies.get(0).getCompanyName()))
+                .andExpect(jsonPath("$.employeesNumber").value(companies.get(0).getEmployeesNumber()));
     }
 
 
+    @Test
+    void should_return_companies_when_get_companies_by_range_given_page_and_pageSize() throws Exception {
+        List<Company> companies = this.saveCompany();
+        mockMvc.perform(get("/companies?page=0&pageSize=3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].companyName").value(companies.get(0).getCompanyName()))
+                .andExpect(jsonPath("$[0].employeesNumber").value(companies.get(0).getEmployeesNumber()));
+    }
+
+    @Test
+    void should_return_void_when_delete_company_given_company_id() throws Exception {
+        List<Company> companies = this.saveCompany();
+        mockMvc.perform(delete("/companies/1"))
+                .andExpect(status().isOk());
+    }
+
+    private List<Company> saveCompany() {
+        List<Company> companies = this.getMockCompany();
+        return this.companyRepository.saveAll(companies);
+    }
 
     private List<Company> getMockCompany() {
         List<Company> companies = new ArrayList<>();
         companies.add(new Company(1, "OOCL", 1, emptyList()));
+        companies.add(new Company(2, "aiqiyi", 1, emptyList()));
+        companies.add(new Company(3, "tencent", 1, emptyList()));
+        companies.add(new Company(4, "huawei", 1, emptyList()));
+        companies.add(new Company(5, "baidu", 1, emptyList()));
         return companies;
     }
-
 
 }

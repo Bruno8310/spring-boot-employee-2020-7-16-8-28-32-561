@@ -50,7 +50,15 @@ public class CompanyService {
     public Company updateCompanyById(Integer id, Company updateCompany) {
         Company company = companyRepository.findById(id).orElse(null);
         if (Objects.nonNull(company)) {
-            company.setCompanyName(updateCompany.getCompanyName());
+            if (Objects.nonNull(updateCompany.getEmployeesNumber())) {
+                company.setCompanyName(updateCompany.getCompanyName());
+            }
+            if (Objects.nonNull(updateCompany.getEmployeesNumber())) {
+                company.setEmployeesNumber(updateCompany.getEmployeesNumber());
+            }
+            if (Objects.nonNull(updateCompany.getEmployees())) {
+                company.setEmployees(updateCompany.getEmployees());
+            }
             return companyRepository.save(company);
         }
         return null;
