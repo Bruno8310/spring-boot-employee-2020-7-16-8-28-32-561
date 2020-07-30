@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
@@ -40,7 +41,7 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee updateEmployeeById(@PathVariable Integer id, @RequestBody Employee updatedEmployee) throws NotFoundException {
+    public Employee updateEmployeeById(@PathVariable Integer id, @RequestBody Employee updatedEmployee) throws NotFoundException, IllegalOperationException {
         return employeeService.updateEmployeeById(id, updatedEmployee);
     }
 

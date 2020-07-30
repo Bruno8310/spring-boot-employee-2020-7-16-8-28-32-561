@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -58,7 +59,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_void_when_update_company_given_company_id_and_company() throws NotFoundException {
+    void should_return_void_when_update_company_given_company_id_and_company() throws NotFoundException, IllegalOperationException {
         // given
         Company company = getMockCompany();
         Company company1 = getMockCompany();

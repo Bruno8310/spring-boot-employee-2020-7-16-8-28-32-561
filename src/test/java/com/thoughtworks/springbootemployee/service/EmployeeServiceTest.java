@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.verify;
 
 public class EmployeeServiceTest {
     @Test
-    void should_return_updated_employee_when_update_given_employee_id_and_employee_info() throws NotFoundException {
+    void should_return_updated_employee_when_update_given_employee_id_and_employee_info() throws NotFoundException, IllegalOperationException {
         // given
         Employee employee = getMockEmploy();
         Employee employee1 = getMockEmploy();

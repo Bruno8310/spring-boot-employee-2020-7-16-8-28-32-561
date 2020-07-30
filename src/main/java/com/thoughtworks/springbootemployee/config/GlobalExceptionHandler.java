@@ -25,5 +25,4 @@ public class GlobalExceptionHandler {
     public String illegalOperate() {
         return ExceptionErrorMessage.ILLEGAL_OPERATION.getErrorMessage();
     }
-
 }
