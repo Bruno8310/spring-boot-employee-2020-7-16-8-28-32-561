@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -55,7 +56,10 @@ public class CompanyService {
         return companies;
     }
 
-    public Company updateCompanyById(Integer id, Company updateCompany) throws NotFoundException {
+    public Company updateCompanyById(Integer id, Company updateCompany) throws NotFoundException, IllegalOperationException {
+        if (id != updateCompany.getId()) {
+            throw new IllegalOperationException();
+        }
         Optional<Company> company = companyRepository.findById(id);
         if (Objects.nonNull(company)) {
             if (Objects.nonNull(updateCompany.getEmployeesNumber())) {
