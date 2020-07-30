@@ -42,19 +42,20 @@ public class CompanyService {
     }
 
     public Page<Company> getCompaniesByRange(int page, int pageSize) {
-        return companyRepository.findAll(PageRequest.of(page, pageSize));
+        return companyRepository.findAll(PageRequest.of(page - 1, pageSize));
     }
 
     public List<Company> getCompaniesByConditions(Integer page, Integer pageSize) throws NotFoundException {
-        List<Company> companies = getAllCompanies();
+        List<Company> companies;
+
         if (Objects.nonNull(page) && Objects.nonNull(pageSize)) {
             Page<Company> companiesByRange = getCompaniesByRange(page, pageSize);
             companies = companiesByRange.getContent();
         } else {
-            throw new NotFoundException();
+            companies = getAllCompanies();
         }
         return companies;
-    }
+}
 
     public Company updateCompanyById(Integer id, Company updateCompany) throws NotFoundException, IllegalOperationException {
         if (id != updateCompany.getId()) {

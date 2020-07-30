@@ -66,7 +66,9 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesByConditions(String gender, Integer page, Integer pageSize) throws NotFoundException {
+
         List<Employee> employees = getAllEmployees();
+
         if (Objects.nonNull(gender) && !gender.isEmpty()) {
             employees = getEmployeesByGender(gender);
         } else {

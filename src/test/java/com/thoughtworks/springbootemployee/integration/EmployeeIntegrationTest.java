@@ -57,7 +57,17 @@ public class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.companyId").value(employees.get(0).getCompanyId()));
     }
 
+    @Test
+    void should_return_employees_when_get_employees_given_nothing() {
+        List<Employee> employees = this.saveEmployee();
+    }
+
+
+
+
+
     private List<Employee> saveEmployee() {
+
         Company company = new Company(1, "alibaba", 0, emptyList());
         this.companyRepository.save(company);
 
