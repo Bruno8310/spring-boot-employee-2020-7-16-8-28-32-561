@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -18,16 +20,17 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee updateEmployeeById(Integer id, Employee updatedEmployee) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
-        if (Objects.nonNull(employee)) {
-            employee.setName(updatedEmployee.getName());
-            employee.setAge(updatedEmployee.getAge());
-            employee.setGender(updatedEmployee.getGender());
-            employee.setSalary(updatedEmployee.getSalary());
-            return employeeRepository.save(employee);
+    public Employee updateEmployeeById(Integer id, Employee updatedEmployee) throws NotFoundException {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if(Objects.isNull(employee)) {
+            throw new NotFoundException();
         }
-        return null;
+        Employee employeeUpdated = employee.get();
+        employeeUpdated.setName(updatedEmployee.getName());
+        employeeUpdated.setAge(updatedEmployee.getAge());
+        employeeUpdated.setGender(updatedEmployee.getGender());
+        employeeUpdated.setSalary(updatedEmployee.getSalary());
+        return employeeRepository.save(employeeUpdated);
     }
 
     public Employee getEmployeeById(Integer id) {

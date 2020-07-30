@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.verify;
 
 public class EmployeeServiceTest {
     @Test
-    void should_return_updated_employee_when_update_given_employee_id_and_employee_info() {
+    void should_return_updated_employee_when_update_given_employee_id_and_employee_info() throws NotFoundException {
         // given
         Employee employee = getMockEmploy();
         Employee employee1 = getMockEmploy();

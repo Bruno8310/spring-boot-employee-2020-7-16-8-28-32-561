@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployeeById(@PathVariable Integer id, @RequestBody Employee updatedEmployee) {
+    public Employee updateEmployeeById(@PathVariable Integer id, @RequestBody Employee updatedEmployee) throws NotFoundException {
         return employeeService.updateEmployeeById(id, updatedEmployee);
     }
 
