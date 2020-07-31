@@ -5,8 +5,11 @@ spring:
   jpa:
     database: h2
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+    show-sql: true
   h2:
     console:
       path: /h2-console
       enabled: true
+  flyway:
+    location: classpath:/db/migration

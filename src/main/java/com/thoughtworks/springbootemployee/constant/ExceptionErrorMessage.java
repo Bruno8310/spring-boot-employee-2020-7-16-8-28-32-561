@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.constant;
 
-public enum  ExceptionErrorMessage {
+public enum ExceptionErrorMessage {
 
     NOT_FOUND("Data Not Found!"),
     ILLEGAL_OPERATION("Illegal Operation!");

@@ -7,6 +7,7 @@ import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.service.CompanyService;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EmployeeIntegrationTest {
 
     @Autowired
@@ -39,7 +39,7 @@ public class EmployeeIntegrationTest {
     private MockMvc mockMvc;
 
 
-    @AfterAll
+    @AfterEach
     public void afterAll() {
         this.employeeRepository.deleteAll();
     }
@@ -47,6 +47,7 @@ public class EmployeeIntegrationTest {
     @Test
     void should_return_employee_when_get_employee_by_id_given_id() throws Exception {
         List<Employee> employees = this.saveEmployee();
+
         mockMvc.perform(get("/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
