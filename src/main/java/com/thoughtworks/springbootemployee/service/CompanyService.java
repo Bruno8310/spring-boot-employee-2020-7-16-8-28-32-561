@@ -75,6 +75,7 @@ public class CompanyService {
         } else {
             throw new NotFoundException();
         }
+        companyRepository.save(updateCompany);
             return company.get();
     }
 }

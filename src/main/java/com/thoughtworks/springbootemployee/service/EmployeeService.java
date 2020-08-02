@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.exception.NotFoundException;
+import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.data.domain.Page;
@@ -22,19 +23,28 @@ public class EmployeeService {
     }
 
     public Employee updateEmployeeById(Integer id, Employee updatedEmployee) throws NotFoundException, IllegalOperationException {
-        if (id != updatedEmployee.getId()) {
+        if (id.equals(updatedEmployee.getId())) {
             throw new IllegalOperationException();
         }
         Optional<Employee> employee = employeeRepository.findById(id);
-        if(Objects.isNull(employee)) {
+        if (Objects.nonNull(employee)) {
+            if (Objects.nonNull(updatedEmployee.getName())) {
+                employee.get().setName(updatedEmployee.getName());
+            }
+            if (Objects.nonNull(updatedEmployee.getAge())) {
+                employee.get().setAge(updatedEmployee.getAge());
+            }
+            if (Objects.nonNull(updatedEmployee.getGender())) {
+                employee.get().setGender(updatedEmployee.getGender());
+            }
+            if (Objects.nonNull(updatedEmployee.getSalary())) {
+                employee.get().setSalary(updatedEmployee.getSalary());
+            }
+        } else {
             throw new NotFoundException();
         }
-        Employee employeeUpdated = employee.get();
-        employeeUpdated.setName(updatedEmployee.getName());
-        employeeUpdated.setAge(updatedEmployee.getAge());
-        employeeUpdated.setGender(updatedEmployee.getGender());
-        employeeUpdated.setSalary(updatedEmployee.getSalary());
-        return employeeRepository.save(employeeUpdated);
+        employeeRepository.save(updatedEmployee);
+        return employee.get();
     }
 
     public Employee getEmployeeById(Integer id) throws NotFoundException {

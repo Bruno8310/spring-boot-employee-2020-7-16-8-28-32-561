@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.Table;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -82,6 +83,28 @@ public class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$[0].id").isNumber());
     }
 
+    @Test
+    void should_return_employee_when_update_employee_given_employeeId_and_new_employee() throws Exception {
+        List<Employee> employees = this.saveEmployee();
+        String employeeContent = "{\n" +
+                "    \"name\": \"xiaohua\",\n" +
+                "    \"age\": 120,\n" +
+                "    \"gender\": \"female\",\n" +
+                "    \"salary\":10000,\n" +
+                "    \"companyId\":"+ employees.get(0).getCompanyId() +"\n" +
+                "}";
+        mockMvc.perform(put("/employees/" + employees.get(0).getId()).contentType(MediaType.APPLICATION_JSON).content(employeeContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("xiaohua"))
+                .andExpect(jsonPath("$.age").value(120));
+    }
+
+    @Test
+    void should_return_void_when_delete_employee_given_employee_id() throws Exception {
+        List<Employee> employees = this.saveEmployee();
+        mockMvc.perform(delete("/employees/"+employees.get(0).getId()))
+                .andExpect(status().isOk());
+    }
 
     private List<Employee> saveEmployee() {
 

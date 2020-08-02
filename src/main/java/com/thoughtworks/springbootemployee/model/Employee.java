@@ -29,7 +29,7 @@ public class Employee {
         this.companyId = companyId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -37,7 +37,7 @@ public class Employee {
         return name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
@@ -45,15 +45,15 @@ public class Employee {
         return gender;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public int getCompanyId() {
+    public Integer getCompanyId() {
         return companyId;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -61,7 +61,7 @@ public class Employee {
         this.name = name;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -69,11 +69,11 @@ public class Employee {
         this.gender = gender;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 
