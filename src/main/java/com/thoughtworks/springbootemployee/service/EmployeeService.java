@@ -58,7 +58,10 @@ public class EmployeeService {
     }
 
     public Page<Employee> getEmployeesByPage(Integer page, Integer pageSize) {
-        return employeeRepository.findAll(PageRequest.of(page, pageSize));
+        if (Objects.nonNull(page) && Objects.nonNull(pageSize)) {
+            return employeeRepository.findAll(PageRequest.of(page, pageSize));
+        }
+        return null;
     }
 
     public List<Employee> getAllEmployees() {
@@ -68,17 +71,13 @@ public class EmployeeService {
     public List<Employee> getEmployeesByConditions(String gender, Integer page, Integer pageSize) throws NotFoundException {
 
         List<Employee> employees = getAllEmployees();
-
         if (Objects.nonNull(gender) && !gender.isEmpty()) {
             employees = getEmployeesByGender(gender);
-        } else {
-            throw new NotFoundException();
         }
         Page<Employee> employeesByPage = getEmployeesByPage(page, pageSize);
+
         if (Objects.nonNull(page) && Objects.nonNull(pageSize) && Objects.nonNull(employeesByPage)) {
             employees = employeesByPage.getContent();
-        } else {
-            throw new NotFoundException();
         }
         return employees;
     }

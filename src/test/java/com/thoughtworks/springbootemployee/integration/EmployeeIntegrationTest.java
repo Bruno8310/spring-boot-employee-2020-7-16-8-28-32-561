@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +52,35 @@ public class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.companyId").value(employees.get(0).getCompanyId()));
     }
 
+    @Test
+    void should_return_employees_when_get_employees_by_gender_given_gender() throws Exception {
 
+        List<Employee> employees = this.saveEmployee();
 
+        mockMvc.perform(get("/employees?gender=male"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].gender").value("male"));
+    }
 
+    @Test
+    void should_return_employees_when_get_employess_given_nothing() throws Exception {
+        List<Employee> employees = this.saveEmployee();
 
+        mockMvc.perform(get("/employees"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(employees.size())));
+    }
+
+    @Test
+    void should_return_employees_when_get_range_employee_given_page_and_pageSize() throws Exception {
+        List<Employee> employees = this.saveEmployee();
+
+        mockMvc.perform(get("/employees?page=1&pageSize=3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").isNumber());
+    }
 
 
     private List<Employee> saveEmployee() {
