@@ -58,7 +58,7 @@ public class CompanyService {
 }
 
     public Company updateCompanyById(Integer id, Company updateCompany) throws NotFoundException, IllegalOperationException {
-        if (id != updateCompany.getId()) {
+        if (id.equals(updateCompany.getId())) {
             throw new IllegalOperationException();
         }
         Optional<Company> company = companyRepository.findById(id);

@@ -68,26 +68,28 @@ public class CompanyServiceTest {
 
         CompanyRepository mockedCompanyRepository = mock(CompanyRepository.class);
 
-        given(mockedCompanyRepository.findById(anyInt())).willReturn(Optional.of(getMockCompany()));
+        given(mockedCompanyRepository.findById(1)).willReturn(Optional.of(getMockCompany()));
 
-        given(mockedCompanyRepository.save(any())).willReturn(company);
+        given(mockedCompanyRepository.save(company)).willReturn(company);
 
         CompanyService companyService = new CompanyService(mockedCompanyRepository);
         // when
         Company updatedCompany = companyService.updateCompanyById(1, company1);
         // then
-        assertEquals(company.getCompanyName(), updatedCompany.getCompanyName());
+        assertEquals(company1.getCompanyName(), updatedCompany.getCompanyName());
     }
 
     @Test
     void should_return_companies_when_get_companies_by_range_given_page_and_pageSize() {
         // given
         CompanyRepository mockCompanyRepository = mock(CompanyRepository.class);
-        given(mockCompanyRepository.findAll(PageRequest.of(1, 2))).
+
+        given(mockCompanyRepository.findAll(PageRequest.of(0, 1))).
                 willReturn(new PageImpl<>(Arrays.asList(getMockCompany())));
+
         CompanyService companyService = new CompanyService(mockCompanyRepository);
         // when
-        List<Company> companies = companyService.getCompaniesByRange(1, 2).toList();
+        List<Company> companies = companyService.getCompaniesByRange(1, 1).toList();
         // then
         assertEquals(1, companies.size());
     }

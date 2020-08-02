@@ -28,8 +28,7 @@ public class CompanyIntegrationTest {
 
     @Autowired
     private CompanyRepository companyRepository;
-    @Autowired
-    private CompanyService companyService;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -63,13 +62,16 @@ public class CompanyIntegrationTest {
 
     @Test
     void should_return_new_company_when_update_old_company_given_comany_and_id() throws Exception {
-        this.saveCompany();
+        List<Company> companyList = this.saveCompany();
+
         Company company = new Company(1, "tencent", 2, emptyList());
+
         String companyContent = "{\n" +
                 "    \"companyName\": \"tencent\",\n" +
                 "    \"employeesNumber\": 2\n" +
                 "}";
-        mockMvc.perform(put("/companies/1").contentType(MediaType.APPLICATION_JSON).content(companyContent))
+
+        mockMvc.perform(put("/companies/"+companyList.get(0).getId()).contentType(MediaType.APPLICATION_JSON).content(companyContent))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.companyName").value(company.getCompanyName()))
                 .andExpect(jsonPath("$.employeesNumber").value(company.getEmployeesNumber()));
@@ -78,8 +80,7 @@ public class CompanyIntegrationTest {
     @Test
     void should_return_company_when_get_company_by_id_given_id() throws Exception {
         List<Company> companies = this.saveCompany();
-
-        mockMvc.perform(get("/companies/1"))
+        mockMvc.perform(get("/companies/"+companies.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.companyName").value(companies.get(0).getCompanyName()))
@@ -91,7 +92,7 @@ public class CompanyIntegrationTest {
     void should_return_companies_when_get_companies_by_range_given_page_and_pageSize() throws Exception {
         List<Company> companies = this.saveCompany();
 
-        mockMvc.perform(get("/companies?page=0&pageSize=3"))
+        mockMvc.perform(get("/companies?page=1&pageSize=3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].id").isNumber())
@@ -99,12 +100,12 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[0].employeesNumber").value(companies.get(0).getEmployeesNumber()));
     }
 
-//    @Test
-//    void should_return_void_when_delete_company_given_company_id() throws Exception {
-//        List<Company> companies = this.saveCompany();
-//        mockMvc.perform(delete("/companies/1"))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    void should_return_void_when_delete_company_given_company_id() throws Exception {
+        List<Company> companies = this.saveCompany();
+        mockMvc.perform(delete("/companies/"+companies.get(0).getId()))
+                .andExpect(status().isOk());
+    }
 
     private List<Company> saveCompany() {
         List<Company> companies = this.getMockCompany();

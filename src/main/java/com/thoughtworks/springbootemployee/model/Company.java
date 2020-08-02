@@ -11,7 +11,7 @@ public class Company {
     private int id;
     private String companyName;
     private int employeesNumber;
-    @OneToMany(mappedBy = "companyId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "companyId")
     private List<Employee> employees;
 
     public Company() {
@@ -58,8 +58,12 @@ public class Company {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Company company = (Company) o;
         return id == company.id &&
                 employeesNumber == company.employeesNumber &&

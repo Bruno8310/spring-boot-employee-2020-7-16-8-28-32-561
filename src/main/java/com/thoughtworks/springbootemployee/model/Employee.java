@@ -10,17 +10,17 @@ import java.util.Objects;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
-    private int age;
+    private Integer age;
     private String gender;
-    private int salary;
-    private int companyId;
+    private Integer salary;
+    private Integer companyId;
 
     public Employee() {
     }
 
-    public Employee(int id, String name, int age, String gender, int salary, int companyId) {
+    public Employee(Integer id, String name, Integer age, String gender, Integer salary, Integer companyId) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -79,8 +79,12 @@ public class Employee {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Employee employee = (Employee) o;
         return id == employee.id &&
                 age == employee.age &&
